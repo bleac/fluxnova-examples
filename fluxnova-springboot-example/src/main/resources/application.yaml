@@ -12,10 +12,11 @@ fluxnova:
         historyTimeToLive: P1D
     authorization:
       enabled: false
+#   Disabling the script-preprocessing plugin intentionally. Refer Plugin documents for more configuration options.
     plugin:
       script-preprocessing:
-        enableEnginePlugin: true
-        defaultCamundaToFluxnovaPreprocessorEnabled: true
+        enableEnginePlugin: false
+        defaultCamundaToFluxnovaPreprocessorEnabled: false
 fluxnova.bpm.admin-user:
   id: demo
   password: demo
