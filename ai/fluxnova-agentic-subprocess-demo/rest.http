@@ -1,0 +1,47 @@
+### 1. Small subscription charge, customer in good standing: expect a provisional credit
+POST http://localhost:8080/engine-rest/process-definition/key/card-dispute-agent/start
+Content-Type: application/json
+
+{
+  "businessKey": "DSP-1001",
+  "variables": {
+    "customerId": { "value": "CUST-1001", "type": "String" },
+    "transactionId": { "value": "TX-5001", "type": "String" },
+    "disputeReason": { "value": "I cancelled this subscription last month but was charged again.", "type": "String" }
+  }
+}
+
+### 2. Large purchase at a high-risk merchant: expect escalation to a human analyst
+POST http://localhost:8080/engine-rest/process-definition/key/card-dispute-agent/start
+Content-Type: application/json
+
+{
+  "businessKey": "DSP-1002",
+  "variables": {
+    "customerId": { "value": "CUST-1002", "type": "String" },
+    "transactionId": { "value": "TX-5002", "type": "String" },
+    "disputeReason": { "value": "I did not make this purchase.", "type": "String" }
+  }
+}
+
+### 3. Restricted account with many recent disputes: expect a rejection
+POST http://localhost:8080/engine-rest/process-definition/key/card-dispute-agent/start
+Content-Type: application/json
+
+{
+  "businessKey": "DSP-1003",
+  "variables": {
+    "customerId": { "value": "CUST-1003", "type": "String" },
+    "transactionId": { "value": "TX-5003", "type": "String" },
+    "disputeReason": { "value": "The parking meter charged me twice.", "type": "String" }
+  }
+}
+
+### Find a dispute by business key (copy its "id")
+GET http://localhost:8080/engine-rest/history/process-instance?processInstanceBusinessKey=DSP-1001
+
+### Its variables, including disputeDecision and decidedBy (replace the id)
+GET http://localhost:8080/engine-rest/history/variable-instance?processInstanceId=<id>
+
+### The activities that ran: which tools the agent called, and where the process ended (replace the id)
+GET http://localhost:8080/engine-rest/history/activity-instance?processInstanceId=<id>&sortBy=startTime&sortOrder=asc

@@ -1,0 +1,20 @@
+services:
+  fluxnova-service:
+    build:
+      context: .
+      dockerfile: fluxnova-service/Dockerfile
+    container_name: fluxnova-agentic-service
+    ports:
+      - "8080:8080"
+    environment:
+      # openai or anthropic
+      LLM_PROVIDER: ${LLM_PROVIDER:-openai}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-claude-haiku-4-5}
+    volumes:
+      - fluxnova_h2:/data/h2
+
+volumes:
+  fluxnova_h2:
