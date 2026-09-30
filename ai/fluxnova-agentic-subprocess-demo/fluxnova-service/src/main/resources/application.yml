@@ -1,0 +1,66 @@
+server:
+  port: 8080
+
+# Which LLM the agent uses: openai or anthropic. Set LLM_PROVIDER and the matching API key.
+llm:
+  provider: ${LLM_PROVIDER:openai}
+  # Spring bean name of each provider's ChatModel
+  chat-model-bean:
+    openai: openAiChatModel
+    anthropic: anthropicChatModel
+
+spring:
+  application:
+    name: fluxnova-service
+  datasource:
+    url: jdbc:h2:file:/data/h2/fluxnova-db;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  ai:
+    model:
+      # Only the selected provider's ChatModel is created, so only its API key is needed.
+      chat: ${llm.provider}
+    # The agentic subprocess plugin (1.0.0-SNAPSHOT) requires model="..." in agent:config but does
+    # not pass it to the provider, so the model is chosen here.
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      chat:
+        model: ${OPENAI_MODEL:gpt-4o-mini}
+        temperature: 0.0
+    anthropic:
+      api-key: ${ANTHROPIC_API_KEY:}
+      chat:
+        model: ${ANTHROPIC_MODEL:claude-haiku-4-5}
+        temperature: 0.0
+        max-tokens: 1024
+
+fluxnova:
+  ai:
+    agent:
+      # agent:config provider="llm" in the BPMN resolves to the selected provider's ChatModel.
+      provider-overrides:
+        llm: ${llm.chat-model-bean.${llm.provider}}
+  bpm:
+    admin-user:
+      id: demo
+      password: demo
+      firstName: Demo
+      lastName: User
+    filter:
+      create: All tasks
+    job-execution:
+      enabled: true
+    generic-properties:
+      properties:
+        historyTimeToLive: P1D
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+logging:
+  level:
+    org.finos.fluxnova.bpm.engine.ai.agent: DEBUG

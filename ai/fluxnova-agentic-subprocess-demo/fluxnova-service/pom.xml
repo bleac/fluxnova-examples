@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.0.7</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>org.finos.fluxnova.example.ai.agentic</groupId>
+    <artifactId>fluxnova-service</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>fluxnova-service</name>
+    <description>Fluxnova engine with the agentic subprocess plugins</description>
+
+    <properties>
+        <java.version>21</java.version>
+        <fluxnova.version>3.0.0</fluxnova.version>
+        <fluxnova-agentic.version>1.0.0-SNAPSHOT</fluxnova-agentic.version>
+        <spring-ai.version>2.0.0</spring-ai.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.finos.fluxnova.bpm</groupId>
+                <artifactId>fluxnova-bom</artifactId>
+                <version>${fluxnova.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!--
+          Agentic subprocess plugins. Installed into the local Maven repository by
+          install-agentic-plugins.sh (see README.md), because their parent POM is not published.
+          This is the same set of modules as the fluxnova-engine-plugins-ai-agentic-subprocess bundle.
+        -->
+        <dependency>
+            <groupId>org.finos.fluxnova.bpm</groupId>
+            <artifactId>fluxnova-engine-plugins-shared</artifactId>
+            <version>${fluxnova-agentic.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.finos.fluxnova.bpm</groupId>
+            <artifactId>fluxnova-engine-plugins-ai-agent-config</artifactId>
+            <version>${fluxnova-agentic.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.finos.fluxnova.bpm</groupId>
+            <artifactId>fluxnova-engine-plugins-ai-agent-tool-context-discovery</artifactId>
+            <version>${fluxnova-agentic.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.finos.fluxnova.bpm</groupId>
+            <artifactId>fluxnova-engine-plugins-ai-agent-llm-connector</artifactId>
+            <version>${fluxnova-agentic.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.finos.fluxnova.bpm</groupId>
+            <artifactId>fluxnova-engine-plugins-ai-agentic-tool-invocation</artifactId>
+            <version>${fluxnova-agentic.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.finos.fluxnova.bpm</groupId>
+            <artifactId>fluxnova-engine-plugins-ai-agent-orchestrator</artifactId>
+            <version>${fluxnova-agentic.version}</version>
+        </dependency>
+        <!-- Dependencies of the plugins, normally inherited from their POMs -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-client-chat</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <!-- LLM providers. spring.ai.model.chat (LLM_PROVIDER) selects which one is active. -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-model-openai</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-model-anthropic</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.finos.fluxnova.bpm.springboot</groupId>
+            <artifactId>fluxnova-bpm-spring-boot-starter-webapp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.finos.fluxnova.bpm.springboot</groupId>
+            <artifactId>fluxnova-bpm-spring-boot-starter-rest</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
