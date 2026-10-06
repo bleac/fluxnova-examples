@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:fluxnova="http://fluxnova.finos.org/schema/1.0/bpmn" xmlns:modeler="http://fluxnova.org/schema/modeler/1.0" id="Definitions_RestrictedVariables" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Fluxnova Modeler" modeler:executionPlatform="Fluxnova Platform">
   <bpmn:process id="restricted-variables-loan-review" name="Loan Review (Restricted Variables)" isExecutable="true" camunda:historyTimeToLive="P1D">
-    <bpmn:documentation>Demonstrates restricted process variables. creditScore (process scope) and riskBand (task scope) are marked fluxnova:restricted="true", so only users granted READ_RESTRICTED on the VARIABLE resource can read their values.</bpmn:documentation>
+    <bpmn:documentation>Demonstrates restricted process variables. creditScore (process scope) and riskBand (task scope) are marked restricted="true", so only users granted READ_RESTRICTED on the VARIABLE resource can read their values.</bpmn:documentation>
     <bpmn:startEvent id="application-received" name="Loan application received">
       <bpmn:outgoing>flow-to-credit-check</bpmn:outgoing>
     </bpmn:startEvent>
@@ -14,7 +14,7 @@
     <bpmn:serviceTask id="run-credit-check" name="Run credit check" camunda:asyncBefore="true" camunda:expression="${true}">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:outputParameter name="creditScore" fluxnova:restricted="true">${loanAmount &gt; 50000 ? 640 : 780}</camunda:outputParameter>
+          <camunda:outputParameter name="creditScore" restricted="true">${loanAmount &gt; 50000 ? 640 : 780}</camunda:outputParameter>
           <camunda:outputParameter name="creditCheckStatus">COMPLETED</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
@@ -25,7 +25,7 @@
     <bpmn:userTask id="review-application" name="Review loan application" camunda:candidateGroups="officers">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="riskBand" fluxnova:restricted="true">${creditScore &gt;= 700 ? 'LOW' : 'HIGH'}</camunda:inputParameter>
+          <camunda:inputParameter name="riskBand" restricted="true">${creditScore &gt;= 700 ? 'LOW' : 'HIGH'}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>flow-to-review</bpmn:incoming>
