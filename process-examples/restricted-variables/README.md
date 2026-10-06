@@ -77,11 +77,11 @@ Stop with `docker compose down`. This deletes all data.
 
 ## How it works
 
-**BPMN.** Add `fluxnova:restricted="true"` to an input or output parameter (or to a call
+**BPMN.** Add `restricted="true"` to an input or output parameter (or to a call
 activity's `in` / `out` mapping):
 
 ```xml
-<camunda:outputParameter name="creditScore" fluxnova:restricted="true">${...}</camunda:outputParameter>
+<camunda:outputParameter name="creditScore" restricted="true">${...}</camunda:outputParameter>
 ```
 
 The `fluxnova` prefix must be bound to `http://fluxnova.finos.org/schema/1.0/bpmn`. Under
